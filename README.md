@@ -1,4 +1,4 @@
-# BasicProjFunctionalInterface----------------BooleanSupplierFunctionalInterface----------------------
+----------------BooleanSupplierFunctionalInterface----------------------
 package com.infotech;
 
 import java.util.function.BooleanSupplier;
@@ -638,7 +638,7 @@ public class ClientTest {
 		
 	}
 }
----------------------ap Default Methods(remove and replace)-------------
+---------------------Map Default Methods(remove and replace)-------------
 package com.infotech.client;
 
 import java.util.HashMap;
@@ -913,4 +913,116 @@ public class ConcurrentHashMapForEachClientTest {
 		
 	}
 
+}
+--------------------------ConcurrentHashMap 2---------------------------
+package com.infotech.client;
+
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentHashMapMethodsClientTest {
+
+	public static void main(String[] args) {
+		
+		ConcurrentHashMap<String, UUID> map = new ConcurrentHashMap<>();
+		for (int i = 1; i < 51; i++) {
+			map.put("SessionId_"+i, UUID.randomUUID());
+		}
+		
+		map.forEachKey(3, System.out::println);
+		
+		System.out.println("----------------------------------");
+		
+		map.forEachValue(3, System.out::println);
+		
+		System.out.println("----------------------------------");
+		
+		map.forEachEntry(3, e->System.out.println(e.getKey()+"\t"+e.getValue()));
+		
+	}
+}
+-------------------------ConcurentHashmap 3-----------------------------
+package com.infotech.client;
+
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentHashMapMethodsClientTest {
+
+	public static void main(String[] args) {
+		
+		ConcurrentHashMap<Integer, UUID> map = new ConcurrentHashMap<>();
+		for (int i = 1; i < 50; i++) {
+			map.put(i, UUID.randomUUID());
+		}
+		
+		Integer sessionId = 20;
+		String searchResult = map.search(3, (k,v)->{
+			if(k.equals(sessionId)){
+				return new String(k+":"+v);
+			}
+			return null;
+		});
+		
+		System.out.println(searchResult);
+		
+		System.out.println("------------------------------------------");
+		
+		String searchEntries = map.searchEntries(3, (e)->{
+			if(e.getValue().toString().contains("ab")){
+				return new String(e.getKey()+":"+e.getValue()); 
+			}
+			return null;
+		});
+		
+		System.out.println(searchEntries);
+		
+		System.out.println("------------------------------------------");
+		Integer searchKeys = map.searchKeys(3, (k)->{
+			if(k>20){
+				return k;
+			}
+			return null;
+		});
+		
+		System.out.println(searchKeys);
+		
+		System.out.println("------------------------------------------");
+		
+		String searchValues = map.searchValues(3, v->{
+			if(v.toString().contains("ab")){
+				return v.toString();
+			}
+			return null;
+		});
+		
+		System.out.println(searchValues);
+	}
+}
+----------------------ConcurentHashMap 4--------------------------------
+package com.infotech.client;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ClientTest {
+
+	public static void main(String[] args) {
+		ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
+		map.put("Krishna", "India");
+		map.put("Ahmad", "Pakistan");
+		map.put("Frank", "Us");
+		map.put("Martin", "Germany");
+		
+		String reduce = map.reduce(2, (k,v)->k+"-"+v, (r1,r2)->r1+","+r2);
+		System.out.println(reduce);
+		
+		System.out.println("----------------------------------------------");
+		
+		String reduceKeys = map.reduceKeys(2, (k1,k2)->k1+","+k2);
+		System.out.println(reduceKeys);
+		System.out.println("----------------------------------------------");
+		String reduceValues = map.reduceValues(2, (v1,v2)->v1+","+v2);
+		System.out.println(reduceValues);
+		
+	}
 }
